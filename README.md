@@ -27,14 +27,24 @@
 ## Telegram
 Описание функций и возможностей
 
-### Сообщение / пост
-#### MarkDown
-![Telegram Post MarkDown View](img/tg_post_markdown_view.png)
-![Telegram Post MarkDown Edit](img/tg_post_markdown_edit.png)
+### [Сущности](wiki/Сущности-диалогов)
+#### [User](wiki/Сущности-диалогов#entity-user)
+#### [Channel](wiki/Сущности-диалогов#entity-channel)
+#### [Chat](wiki/Сущности-диалогов#entity-chat)
 
-#### Controller Bot
-![Telegram Post Controller Bot View](img/tg_post_controllerbot_view.png)
-![Telegram Post Comments](img/tg_post_comments.png)
+### [Форматы контента](wiki/Форматы-контента)
+#### [Текст](wiki/Функционал-и-возможности#post-markdown)
+#### [Instant View](wiki/Функционал-и-возможности#content-instant-view)
+#### [Изображение](wiki/Функционал-и-возможности#content-image)
+#### [Видео](wiki/Функционал-и-возможности#content-video)
+#### [Аудиосообщение](wiki/Функционал-и-возможности#content-audio-message)
+#### [Видеосообщение](wiki/Функционал-и-возможности#content-video-message)
+#### [Документ](wiki/Функционал-и-возможности#content-document)
+#### [Стикер](wiki/Функционал-и-возможности#content-sticker)
+#### [Геопозиция](wiki/Функционал-и-возможности#content-geo)
+#### [Контакт](wiki/Функционал-и-возможности#content-contact)
 
-#### Вложения
-![Telegram Post Attachments](img/tg_post_attachments.png)
+### [Сообщение / пост](wiki/Функционал-и-возможности)
+#### [MarkDown](wiki/Функционал-и-возможности#post-markdown)
+#### [Controller Bot](wiki/Функционал-и-возможности#post-controllerbot)
+#### [Вложения](wiki/Функционал-и-возможности#post-attachments)

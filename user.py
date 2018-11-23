@@ -1,6 +1,10 @@
 from func.tg_user import client
 
+import datetime
+
 from telethon.tl.types import Channel, Chat, User
+from telethon.tl.types import InputMessagesFilterEmpty, InputUserEmpty, InputPeerEmpty, InputPeerSelf
+from telethon.tl.functions.messages import SearchRequest, SearchGlobalRequest
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import GetFullChatRequest
 from telethon.tl.functions.users import GetFullUserRequest
@@ -67,6 +71,35 @@ def get_full(name=1091219672):
 
 	return full.to_dict()
 
+def search(text='ФИО', name=None):
+	if name:
+		entity = client.get_entity(name)
+	else:
+		entity = InputPeerEmpty()
+
+	return client(SearchRequest(
+		peer=entity,
+		q=text,
+		filter=InputMessagesFilterEmpty(),
+		min_date=datetime.datetime(2018, 11, 22),
+		max_date=None, # datetime.datetime(2018, 11, 23),
+		offset_id=0,
+		add_offset=0,
+		limit=100,
+		max_id=0,
+		min_id=0,
+		hash=0,
+		from_id=None, # InputUserEmpty(),
+	))
+
+	# return client(SearchGlobalRequest(
+	# 	q=text,
+	# 	offset_date=datetime.datetime(2018, 11, 23),
+	# 	offset_peer=InputPeerSelf(),
+	# 	offset_id=0,
+	# 	limit=100,
+	# ))
+
 
 # def replier(update):
 # 	if isinstance(update, (UpdateNewMessage, UpdateNewChannelMessage)) and str(update.message.to_id.channel_id) in from_id:
@@ -95,4 +128,5 @@ def get_full(name=1091219672):
 
 if __name__ == '__main__':
 	# print(get_dialogs())
-	print(get_full(int(input())))
+	# print(get_full(int(input())))
+	print(search(input()))

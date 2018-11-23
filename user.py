@@ -1,13 +1,72 @@
 from func.tg_user import client
-# from telethon import Channel
+
 from telethon.tl.types import Channel, Chat, User
+from telethon.tl.functions.channels import GetFullChannelRequest
+from telethon.tl.functions.messages import GetFullChatRequest
+from telethon.tl.functions.users import GetFullUserRequest
 
-# print(client.get_me())
 
-# client.send_message('kosyachniy', 'Hello World from Telethon!')
+def get_me():
+	return client.get_me()
 
-# chat = client.get_entity('t.me/inst_admins')
-# print(chat)
+# Отправить сообщение
+def send_message(name='kosyachniy', message='Hello ;)'):
+	client.send_message(name, message)
+
+# Список диалогов
+# None - вся история
+def get_dialogs(count=10):
+	dialogs = []
+
+	for i in client.get_dialogs()[:count]:
+		entity = i.entity.to_dict()
+
+		res = {
+			'id': entity['id'],
+			'type': entity['_'],
+			'username': entity['username'] if 'username' in entity else None,
+		}
+		if entity['_'] == 'User':
+			res['access'] = entity['access_hash']
+			res['bot'] = entity['bot']
+			res['name'] = entity['first_name']
+			res['surname'] = entity['last_name']
+		elif entity['_'] == 'Channel':
+			res['access'] = entity['access_hash']
+			res['title'] = entity['title']
+			res['super'] = entity['megagroup']
+		elif entity['_'] == 'Chat':
+			res['title'] = entity['title']
+
+		dialogs.append(res)
+
+	return '\n'.join([str(i) for i in dialogs])
+
+# Получить сущность
+# 't.me/nickname' / '@nickname' / id
+def get_entity(name=1142824902):
+	return client.get_entity(name)
+
+# История сообщений
+def get_messages(id=136563129):
+	return client.get_message_history(id)
+
+# Получение полной информации
+def get_full(name=1091219672):
+	entity = client.get_entity(name)
+	print(entity)
+
+	if type(entity) == Channel:
+		full = GetFullChannelRequest(entity)
+	elif type(entity) == Chat:
+		full = GetFullChatRequest(entity)
+	elif type(entity) == User:
+		full = GetFullUserRequest(entity)
+	else:
+		raise AssertionError(entity)
+
+	return full.to_dict()
+
 
 # def replier(update):
 # 	if isinstance(update, (UpdateNewMessage, UpdateNewChannelMessage)) and str(update.message.to_id.channel_id) in from_id:
@@ -33,22 +92,7 @@ from telethon.tl.types import Channel, Chat, User
 # client.start()
 # client.run_until_disconnected()
 
-for i in client.get_dialogs()[:10]:
-	entity = i.entity
 
-	print(entity.id, end=': ')
-
-	if type(entity) == Channel:
-		print(f'Channel (access: {entity.access_hash})')
-	elif type(entity) == Chat:
-		print('Chat')
-	elif type(entity) == User:
-		print(f'User (access: {entity.access_hash})')
-	else:
-		print('!', entity)
-
-	# x = i.to_dict()['peer']['channel_id']
-	# print('User / Bot', x)
-
-# from_id = 136563129
-# print(client.get_message_history(from_id))
+if __name__ == '__main__':
+	# print(get_dialogs())
+	print(get_full(int(input())))

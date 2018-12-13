@@ -1,12 +1,12 @@
 from func.tg_user import client
 
+import sys
 import datetime
 
-from telethon.tl.types import Channel, Chat, User
-from telethon.tl.types import InputMessagesFilterEmpty, InputUserEmpty, InputPeerEmpty, InputPeerSelf
-from telethon.tl.functions.messages import SearchRequest, SearchGlobalRequest
+from telethon.tl import types
+from telethon.tl.types import Channel, Chat, User, InputUserEmpty, InputPeerEmpty, InputPeerSelf, InputMessagesFilterEmpty
+from telethon.tl.functions.messages import SearchRequest, SearchGlobalRequest, GetFullChatRequest
 from telethon.tl.functions.channels import GetFullChannelRequest
-from telethon.tl.functions.messages import GetFullChatRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
 
@@ -71,16 +71,43 @@ def get_full(name=1091219672):
 
 	return full.to_dict()
 
-def search(text='ФИО', name=None):
-	if name:
-		entity = client.get_entity(name)
+def search(text='ФИО', mes_author=None, mes_type=None):
+	if mes_author:
+		mes_author = client.get_entity(mes_author)
 	else:
-		entity = InputPeerEmpty()
+		mes_author = InputPeerEmpty()
+
+	if not mes_type:
+		mes_type = types.InputMessagesFilterEmpty()
+	elif mes_type == 'image':
+		mes_type = types.InputMessagesFilterPhotos() # InputMessagesFilterChatPhotos()
+	elif mes_type == 'video':
+		mes_type = types.InputMessagesFilterVideo()
+	elif mes_type == 'document':
+		mes_type = types.InputMessagesFilterDocument()
+	elif mes_type == 'geo':
+		mes_type = types.InputMessagesFilterGeo()
+	elif mes_type == 'music':
+		mes_type = types.InputMessagesFilterMusic()
+	elif mes_type == 'call':
+		mes_type = types.InputMessagesFilterPhoneCalls()
+	elif mes_type == 'voice':
+		mes_type = types.InputMessagesFilterRoundVoice() # InputMessagesFilterVoice()
+	elif mes_type == 'video_message':
+		mes_type = types.InputMessagesFilterRoundVideo()
+	elif mes_type == 'url':
+		mes_type = types.InputMessagesFilterUrl()
+	elif mes_type == 'contact':
+		mes_type = types.InputMessagesFilterContacts()
+	elif mes_type == 'gif':
+		mes_type = types.InputMessagesFilterGif()
+	elif mes_type == 'mentions':
+		mes_type = types.InputMessagesFilterMyMentions()
 
 	return client(SearchRequest(
-		peer=entity,
+		peer=mes_author,
 		q=text,
-		filter=InputMessagesFilterEmpty(),
+		filter=mes_type,
 		min_date=datetime.datetime(2018, 11, 22),
 		max_date=None, # datetime.datetime(2018, 11, 23),
 		offset_id=0,
@@ -127,6 +154,17 @@ def search(text='ФИО', name=None):
 
 
 if __name__ == '__main__':
+	print('!')
+
+	# globals()[sys.argv[1]]()
+
+	# if len(sys.argv) > 2:
+	# 	res = globals()[sys.argv[1]](*sys.argv[2:])
+	# else:
+	# 	res = globals()[sys.argv[1]]()
+
+	# print(res)
+
 	# print(get_dialogs())
 	# print(get_full(int(input())))
 	print(search(input()))

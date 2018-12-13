@@ -1,7 +1,8 @@
 import telegram
+from telegram.error import NetworkError, Unauthorized
+
 import json
 import time
-from telegram.error import NetworkError, Unauthorized
 
 
 def process(echo):

@@ -71,61 +71,63 @@ def get_full(name=1091219672):
 
 	return full.to_dict()
 
-def search(text='ФИО', mes_author=None, mes_type=None):
-	if mes_author:
-		mes_author = client.get_entity(mes_author)
-	else:
-		mes_author = InputPeerEmpty()
+def search(text='ФИО', count=2, mes_author=None, mes_type=None):
+	count = int(count)
 
-	if not mes_type:
-		mes_type = types.InputMessagesFilterEmpty()
-	elif mes_type == 'image':
-		mes_type = types.InputMessagesFilterPhotos() # InputMessagesFilterChatPhotos()
-	elif mes_type == 'video':
-		mes_type = types.InputMessagesFilterVideo()
-	elif mes_type == 'document':
-		mes_type = types.InputMessagesFilterDocument()
-	elif mes_type == 'geo':
-		mes_type = types.InputMessagesFilterGeo()
-	elif mes_type == 'music':
-		mes_type = types.InputMessagesFilterMusic()
-	elif mes_type == 'call':
-		mes_type = types.InputMessagesFilterPhoneCalls()
-	elif mes_type == 'voice':
-		mes_type = types.InputMessagesFilterRoundVoice() # InputMessagesFilterVoice()
-	elif mes_type == 'video_message':
-		mes_type = types.InputMessagesFilterRoundVideo()
-	elif mes_type == 'url':
-		mes_type = types.InputMessagesFilterUrl()
-	elif mes_type == 'contact':
-		mes_type = types.InputMessagesFilterContacts()
-	elif mes_type == 'gif':
-		mes_type = types.InputMessagesFilterGif()
-	elif mes_type == 'mentions':
-		mes_type = types.InputMessagesFilterMyMentions()
+	# if mes_author:
+	# 	mes_author = client.get_entity(mes_author)
+	# else:
+	# 	mes_author = InputPeerEmpty()
 
-	return client(SearchRequest(
-		peer=mes_author,
-		q=text,
-		filter=mes_type,
-		min_date=datetime.datetime(2018, 11, 22),
-		max_date=None, # datetime.datetime(2018, 11, 23),
-		offset_id=0,
-		add_offset=0,
-		limit=100,
-		max_id=0,
-		min_id=0,
-		hash=0,
-		from_id=None, # InputUserEmpty(),
-	))
+	# if not mes_type:
+	# 	mes_type = types.InputMessagesFilterEmpty()
+	# elif mes_type == 'image':
+	# 	mes_type = types.InputMessagesFilterPhotos() # InputMessagesFilterChatPhotos()
+	# elif mes_type == 'video':
+	# 	mes_type = types.InputMessagesFilterVideo()
+	# elif mes_type == 'document':
+	# 	mes_type = types.InputMessagesFilterDocument()
+	# elif mes_type == 'geo':
+	# 	mes_type = types.InputMessagesFilterGeo()
+	# elif mes_type == 'music':
+	# 	mes_type = types.InputMessagesFilterMusic()
+	# elif mes_type == 'call':
+	# 	mes_type = types.InputMessagesFilterPhoneCalls()
+	# elif mes_type == 'voice':
+	# 	mes_type = types.InputMessagesFilterRoundVoice() # InputMessagesFilterVoice()
+	# elif mes_type == 'video_message':
+	# 	mes_type = types.InputMessagesFilterRoundVideo()
+	# elif mes_type == 'url':
+	# 	mes_type = types.InputMessagesFilterUrl()
+	# elif mes_type == 'contact':
+	# 	mes_type = types.InputMessagesFilterContacts()
+	# elif mes_type == 'gif':
+	# 	mes_type = types.InputMessagesFilterGif()
+	# elif mes_type == 'mentions':
+	# 	mes_type = types.InputMessagesFilterMyMentions()
 
-	# return client(SearchGlobalRequest(
+	# return client(SearchRequest(
+	# 	peer=mes_author,
 	# 	q=text,
-	# 	offset_date=datetime.datetime(2018, 11, 23),
-	# 	offset_peer=InputPeerSelf(),
+	# 	filter=mes_type,
+	# 	min_date=datetime.datetime(2018, 11, 22),
+	# 	max_date=None, # datetime.datetime(2018, 11, 23),
 	# 	offset_id=0,
+	# 	add_offset=0,
 	# 	limit=100,
+	# 	max_id=0,
+	# 	min_id=0,
+	# 	hash=0,
+	# 	from_id=None, # InputUserEmpty(),
 	# ))
+
+	return client(SearchGlobalRequest(
+		q=text,
+		offset_date=datetime.datetime.now(),
+		offset_peer=InputPeerEmpty(),
+		offset_id=0,
+		limit=count,
+	))
 
 
 # def replier(update):
@@ -154,17 +156,9 @@ def search(text='ФИО', mes_author=None, mes_type=None):
 
 
 if __name__ == '__main__':
-	print('!')
+	if len(sys.argv) > 2:
+		res = globals()[sys.argv[1]](*sys.argv[2:])
+	else:
+		res = globals()[sys.argv[1]]()
 
-	# globals()[sys.argv[1]]()
-
-	# if len(sys.argv) > 2:
-	# 	res = globals()[sys.argv[1]](*sys.argv[2:])
-	# else:
-	# 	res = globals()[sys.argv[1]]()
-
-	# print(res)
-
-	# print(get_dialogs())
-	# print(get_full(int(input())))
-	print(search(input()))
+	print(res)

@@ -24,21 +24,24 @@
 
 <nav class="navbar navbar-expand-lg navbar-{{ theme }} bg-{{ theme }} sticky-top">
 	<div class="container">
-		<a href="/" class="navbar-brand">Telegram</a>
+		<a class="navbar-brand">Telegram</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+				<li class="nav-item dropdown"></li>
+			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="nav-item dropdown">	
 					<form action="/search/" method="post" class="form-inline my-2 my-lg-0">
 						<input name="search" class="form-control mr-sm-2" type="search" placeholder="Search">
 					</form>
 				</li>
-				<li class="nav-item">
+<!-- 				<li class="nav-item">
 					@{{ user.login }}
-				</li>
+				</li> -->
 			</ul>
 		</div>
 	</div>

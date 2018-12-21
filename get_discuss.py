@@ -1,4 +1,4 @@
-from user import search
+from func.tg_user import search
 
 from dicttoxml import dicttoxml
 
@@ -10,7 +10,7 @@ def toxml(obj):
 	res = dicttoxml(obj, attr_type=False).decode('utf-8')
 	return parseString(res).toprettyxml()
 
-def get_xml(req):
+def get_xml(req, inp):
 	all = []
 
 	for i in req:
@@ -27,7 +27,7 @@ def get_xml(req):
 
 			'Date': i.date.timestamp(),
 
-			'Keyword': req,
+			'Keyword': inp,
 
 			'Details': {
 				'Emotions': {
@@ -42,7 +42,7 @@ def get_xml(req):
 
 	return toxml(all)
 
-def get_json(req):
+def get_json(req, inp):
 	all = []
 
 	for i in req:
@@ -59,7 +59,7 @@ def get_json(req):
 			},
 
 			# 'hashtags': ,
-			'keyword': req,
+			'keyword': inp,
 
 			'time': i.date.timestamp(),
 
@@ -74,14 +74,20 @@ def get_json(req):
 
 	return json.dumps(all, ensure_ascii=False, indent='\t')
 
+def search_json(req):
+	res = search(req, 5).messages
+	return get_json(res, req)
+
 
 if __name__ == '__main__':
-	req = search('Керчь', 5).messages
+	inp = 'Керчь'
 
-	res = get_xml(req)
+	req = search(inp, 5).messages
+
+	res = get_xml(req, inp)
 	with open('res.xml', 'w') as file:
 		print(res, file=file)
 
-	res = get_json(req)
+	res = get_json(req, inp)
 	with open('res.json', 'w') as file:
 		print(res, file=file)

@@ -16,6 +16,28 @@
 
 <br><hr><br>
 
+<canvas id="myChart"></canvas>
+<script type="text/javascript" charset="utf-8">
+	var ctx = document.getElementById('myChart').getContext('2d');
+	var chart = new Chart(ctx, {
+		type: 'line',
+
+		data: {
+			labels: [{% for i in timeline %}"#{{ i.time }}",{% endfor %}],
+			datasets: [{
+				label: "Обсуждаемость",
+				// backgroundColor: 'rgb(255, 204, 0)',
+				borderColor: 'rgb(204, 153, 0)',
+				data: [{% for i in timeline %}{{ i.count }},{% endfor %}],
+			}]
+		},
+
+		options: {},
+	});
+</script>
+
+<br><hr><br>
+
 {% for i in cont %}
 
 <div class="card">

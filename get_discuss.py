@@ -1,9 +1,10 @@
 from xml.dom.minidom import parseString
 import json
+import time
 
 from dicttoxml import dicttoxml
 
-from func.tg_user import search
+from func.tg_user import search, get_entity
 
 
 def toxml(obj):
@@ -74,9 +75,39 @@ def get_json(req, inp):
 
 	return json.dumps(all, ensure_ascii=False, indent='\t')
 
+def get_styled(req):
+	all = []
+	
+	for i in req:
+		entity = get_entity(i.chat_id)
+
+		all.append({
+			'source': {
+				'dialogs': i.chat_id,
+				'id': entity.id,
+				'name': '{} {}'.format(entity.first_name, entity.last_name) if i.is_private else entity.title,
+			},
+			'id': i.id,
+
+			'cont': i.message,
+
+			'time': time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(i.date.timestamp())),
+			'views': i.views,
+		})
+
+	return all
+
 def search_json(req, count):
 	res = search(req, count).messages
 	return get_json(res, req)
+
+def search_xml(req, count):
+	res = search(req, count).messages
+	return get_xml(res, req)
+
+def search_styled(req, count):
+	res = search(req, count).messages
+	return get_styled(res)
 
 
 if __name__ == '__main__':
@@ -92,4 +123,5 @@ if __name__ == '__main__':
 	with open('data/res.json', 'w') as file:
 		print(res, file=file)
 
-	print(res) #
+	res = get_styled(req)
+	print(res)

@@ -85,11 +85,11 @@ if __name__ == '__main__':
 	req = search(inp, 5).messages
 
 	res = get_xml(req, inp)
-	with open('res.xml', 'w') as file:
+	with open('data/res.xml', 'w') as file:
 		print(res, file=file)
 
 	res = get_json(req, inp)
-	with open('res.json', 'w') as file:
+	with open('data/res.json', 'w') as file:
 		print(res, file=file)
 
 	print(res) #

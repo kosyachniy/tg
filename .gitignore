@@ -1,7 +1,14 @@
+# Кэш
+
 **/__pycache__/
 **/*.pyc
+**/*.session
+**/*.session-journal
+
+# Ключи
 
 keys.json
-**/*.session
+
+# Виртуальное окружение
 
 **/flask/

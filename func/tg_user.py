@@ -3,9 +3,8 @@ import json
 import datetime
 
 from telethon import TelegramClient, sync
-# from telethon.tl import types
-from telethon.tl.types import Channel, Chat, User, InputUserEmpty, InputPeerEmpty, InputPeerSelf, InputMessagesFilterEmpty
-from telethon.tl.functions.messages import SearchRequest, SearchGlobalRequest, GetFullChatRequest
+from telethon.tl.types import InputPeerEmpty # , Channel, Chat, User, InputUserEmpty, InputPeerSelf, InputMessagesFilterEmpty
+from telethon.tl.functions.messages import SearchGlobalRequest # , SearchRequest, GetFullChatRequest
 # from telethon.tl.functions.channels import GetFullChannelRequest
 # from telethon.tl.functions.users import GetFullUserRequest
 
@@ -16,150 +15,108 @@ with open('keys.json', 'r') as file:
 client = TelegramClient('main', keys['tg_app_id'], keys['tg_app_hash']).start()
 
 
-# Получить текущий аккаунт
+# Текущий аккаунт
+
 def get_me():
 	return client.get_me()
 
-# Отправить сообщение
-def send_message(name='kosyachniy', message='Hello ;)'):
-	client.send_message(name, message)
+# # Список диалогов
 
-# Список диалогов
-# None - вся история
-def get_dialogs(count=10):
-	dialogs = []
+# # None - вся история
+# def get_dialogs(count=None):
+# 	dialogs = []
 
-	for i in client.get_dialogs()[:count]:
-		entity = i.entity.to_dict()
+# 	for i in client.get_dialogs()[:count]:
+# 		entity = i.entity.to_dict()
 
-		res = {
-			'id': entity['id'],
-			'type': entity['_'],
-			'username': entity['username'] if 'username' in entity else None,
-		}
-		if entity['_'] == 'User':
-			res['access'] = entity['access_hash']
-			res['bot'] = entity['bot']
-			res['name'] = entity['first_name']
-			res['surname'] = entity['last_name']
-		elif entity['_'] == 'Channel':
-			res['access'] = entity['access_hash']
-			res['title'] = entity['title']
-			res['super'] = entity['megagroup']
-		elif entity['_'] == 'Chat':
-			res['title'] = entity['title']
+# 		res = {
+# 			'id': entity['id'],
+# 			'type': entity['_'],
+# 			'username': entity['username'] if 'username' in entity else None,
+# 		}
+# 		if entity['_'] == 'User':
+# 			res['access'] = entity['access_hash']
+# 			res['bot'] = entity['bot']
+# 			res['name'] = entity['first_name']
+# 			res['surname'] = entity['last_name']
+# 		elif entity['_'] == 'Channel':
+# 			res['access'] = entity['access_hash']
+# 			res['title'] = entity['title']
+# 			res['super'] = entity['megagroup']
+# 		elif entity['_'] == 'Chat':
+# 			res['title'] = entity['title']
 
-		dialogs.append(res)
+# 		dialogs.append(res)
 
-	return '\n'.join([str(i) for i in dialogs])
+# 	return '\n'.join([str(i) for i in dialogs])
 
 # Получить сущность
+
 # 't.me/nickname' / '@nickname' / id
-def get_entity(name=1142824902):
+def get_entity(name):
 	return client.get_entity(name)
 
-# История сообщений
-def get_messages(id=136563129):
-	return client.get_message_history(id)
+# # История сообщений
 
-# Получение полной информации
-def get_full(name=1091219672):
-	entity = client.get_entity(name)
-	print(entity)
+# def get_messages(id):
+# 	return client.get_message_history(id)
 
-	if type(entity) == Channel:
-		full = GetFullChannelRequest(entity)
-	elif type(entity) == Chat:
-		full = GetFullChatRequest(entity)
-	elif type(entity) == User:
-		full = GetFullUserRequest(entity)
-	else:
-		raise AssertionError(entity)
+# # Полная информация
 
-	return full.to_dict()
+# def get_full(name):
+# 	entity = client.get_entity(name)
+# 	print(entity)
 
-def search(text, count, mes_author=None, mes_type=None):
+# 	if type(entity) == Channel:
+# 		full = GetFullChannelRequest(entity)
+# 	elif type(entity) == Chat:
+# 		full = GetFullChatRequest(entity)
+# 	elif type(entity) == User:
+# 		full = GetFullUserRequest(entity)
+# 	else:
+# 		raise AssertionError(entity)
+
+# 	return full.to_dict()
+
+# Поиск
+
+def search(text, count=None, mes_author=None, mes_type=None):
 	count = int(count)
+	messages = []
 
-	# if mes_author:
-	# 	mes_author = client.get_entity(mes_author)
-	# else:
-	# 	mes_author = InputPeerEmpty()
+	if not count or count > 100:
+		offset = 0
+		while True:
+			count_new = 100 if not count else min(100, count)
 
-	# if not mes_type:
-	# 	mes_type = types.InputMessagesFilterEmpty()
-	# elif mes_type == 'image':
-	# 	mes_type = types.InputMessagesFilterPhotos() # InputMessagesFilterChatPhotos()
-	# elif mes_type == 'video':
-	# 	mes_type = types.InputMessagesFilterVideo()
-	# elif mes_type == 'document':
-	# 	mes_type = types.InputMessagesFilterDocument()
-	# elif mes_type == 'geo':
-	# 	mes_type = types.InputMessagesFilterGeo()
-	# elif mes_type == 'music':
-	# 	mes_type = types.InputMessagesFilterMusic()
-	# elif mes_type == 'call':
-	# 	mes_type = types.InputMessagesFilterPhoneCalls()
-	# elif mes_type == 'voice':
-	# 	mes_type = types.InputMessagesFilterRoundVoice() # InputMessagesFilterVoice()
-	# elif mes_type == 'video_message':
-	# 	mes_type = types.InputMessagesFilterRoundVideo()
-	# elif mes_type == 'url':
-	# 	mes_type = types.InputMessagesFilterUrl()
-	# elif mes_type == 'contact':
-	# 	mes_type = types.InputMessagesFilterContacts()
-	# elif mes_type == 'gif':
-	# 	mes_type = types.InputMessagesFilterGif()
-	# elif mes_type == 'mentions':
-	# 	mes_type = types.InputMessagesFilterMyMentions()
+			messages_new = client(SearchGlobalRequest(
+				q=text,
+				offset_date=datetime.datetime.now(),
+				offset_peer=InputPeerEmpty(),
+				offset_id=offset,
+				limit=count_new,
+			)).messages
 
-	# return client(SearchRequest(
-	# 	peer=mes_author,
-	# 	q=text,
-	# 	filter=mes_type,
-	# 	min_date=datetime.datetime(2018, 11, 22),
-	# 	max_date=None, # datetime.datetime(2018, 11, 23),
-	# 	offset_id=0,
-	# 	add_offset=0,
-	# 	limit=100,
-	# 	max_id=0,
-	# 	min_id=0,
-	# 	hash=0,
-	# 	from_id=None, # InputUserEmpty(),
-	# ))
+			messages.extend(messages_new)
 
-	return client(SearchGlobalRequest(
-		q=text,
-		offset_date=datetime.datetime.now(),
-		offset_peer=InputPeerEmpty(),
-		offset_id=0,
-		limit=count,
-	))
+			if count:
+				count -= count_new
 
+			if len(messages_new) < 100 or count == 0:
+				break
 
-# def replier(update):
-# 	if isinstance(update, (UpdateNewMessage, UpdateNewChannelMessage)) and str(update.message.to_id.channel_id) in from_id:
-# 		print(update)
-# 		text = update.message.message
+			offset += 100
 
-# 		try:
-# 			text += '\n' + update.message.media.caption
-# 		except:
-# 			pass
+	else:
+		messages = client(SearchGlobalRequest(
+			q=text,
+			offset_date=datetime.datetime.now(),
+			offset_peer=InputPeerEmpty(),
+			offset_id=0,
+			limit=count,
+		)).messages
 
-# 		print(text)
-
-# client.add_update_handler(replier)
-# input('!')
-# client.disconnect()
-
-# @client.on(events.NewMessage)
-# async def my_event_handler(event):
-#	 if 'hello' in event.raw_text:
-#		 await event.reply('hi!')
-
-# client.start()
-# client.run_until_disconnected()
+	return messages
 
 
 if __name__ == '__main__':

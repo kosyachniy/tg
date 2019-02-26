@@ -14,12 +14,15 @@ app = Flask(__name__)
 @app.route('/<text>')
 @app.route('/<text>/')
 def index(text='Керчь'):
-	messages = search(text, 100).messages
+	messages = search(text, 100)
+	# print(len(messages))
 
 	return render_template('index.html',
 		user=get_me(),
 		cont=get_styled(messages),
 		timeline = timeline(messages),
+
+		len = len,
 	)
 
 @app.route('/sys_search', methods=['POST'])

@@ -98,22 +98,22 @@ def get_styled(req):
 	return all
 
 def search_json(req, count):
-	res = search(req, count).messages
+	res = search(req, count)
 	return get_json(res, req)
 
 def search_xml(req, count):
-	res = search(req, count).messages
+	res = search(req, count)
 	return get_xml(res, req)
 
 def search_styled(req, count):
-	res = search(req, count).messages
+	res = search(req, count)
 	return get_styled(res)
 
 
 if __name__ == '__main__':
 	inp = 'Керчь'
 
-	req = search(inp, 5).messages
+	req = search(inp, 5)
 
 	res = get_xml(req, inp)
 	with open('data/res.xml', 'w') as file:

@@ -23,7 +23,7 @@
 		type: 'line',
 
 		data: {
-			labels: [{% for i in timeline %}"#{{ i.time }}",{% endfor %}],
+			labels: [{% for i in timeline %}"{{ i.time }}",{% endfor %}],
 			datasets: [{
 				label: "Обсуждаемость",
 				// backgroundColor: 'rgb(255, 204, 0)',
@@ -36,7 +36,13 @@
 	});
 </script>
 
-<br><hr><br>
+<br><br>
+
+<span class="badge badge-primary">
+	Сообщений: {{ len(cont) }}
+</span>
+
+<br><br><hr><br>
 
 {% for i in cont %}
 

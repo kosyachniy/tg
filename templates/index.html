@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ language }}">
+<html lang="ru">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-{{ theme }} bg-{{ theme }} sticky-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
 	<div class="container">
 		<a class="navbar-brand">Telegram</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,48 +31,34 @@
 
 		<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item dropdown"></li>
+				<li class="nav-item dropdown">
+					<a href="https://github.com/kosyachniy/tg" class="nav-link">Репозиторий</a>
+				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li class="nav-item dropdown">	
+				<li class="nav-item">	
 					<form action="/search/" method="post" class="form-inline my-2 my-lg-0">
 						<input name="search" class="form-control mr-sm-2" type="search" placeholder="Search">
 					</form>
 				</li>
-<!-- 				<li class="nav-item">
-					@{{ user.login }}
-				</li> -->
+				<li class="nav-item">
+					<a class="nav-link">
+						@{{ user.username }}
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
 </nav>
 
 <div class="container" id="main">
-{% block cont %}{% endblock %}
-</div>
 
-<footer class="section footer-classic context-light bg-light">
-	<div class="container">
-		<div class="row row-30">
-			<div class="col-md-4 col-xl-5">
-				<div class="pr-xl-4">
-					<p>Анализ Telegram</p>
-					<p><a href="https://github.com/kosyachniy/tg">Репозиторий</a></p>
-				</div>
-			</div>
-			<div class="col-md-4">
-			</div>
-			<div class="col-md-4 col-xl-3">
-				<h5>Ссылки</h5>
-				<ul class="nav-list">
-					<li><a href=""></a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="row no-gutters social-container">
-	</div>
-</footer>
+{% for i in cont %}
+<br><hr><br>
+{{ i }}
+{% endfor %}
+
+</div>
 
 <script src="/static/main_footer.js"></script>
 

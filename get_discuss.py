@@ -1,9 +1,9 @@
-from func.tg_user import search
+from xml.dom.minidom import parseString
+import json
 
 from dicttoxml import dicttoxml
 
-from xml.dom.minidom import parseString
-import json
+from func.tg_user import search
 
 
 def toxml(obj):
@@ -74,8 +74,8 @@ def get_json(req, inp):
 
 	return json.dumps(all, ensure_ascii=False, indent='\t')
 
-def search_json(req):
-	res = search(req, 5).messages
+def search_json(req, count):
+	res = search(req, count).messages
 	return get_json(res, req)
 
 
@@ -91,3 +91,5 @@ if __name__ == '__main__':
 	res = get_json(req, inp)
 	with open('res.json', 'w') as file:
 		print(res, file=file)
+
+	print(res) #

@@ -1,13 +1,13 @@
 import json
-import sys
+# import sys
 import datetime
 
 from telethon import TelegramClient, sync
-from telethon.tl import types
+# from telethon.tl import types
 from telethon.tl.types import Channel, Chat, User, InputUserEmpty, InputPeerEmpty, InputPeerSelf, InputMessagesFilterEmpty
 from telethon.tl.functions.messages import SearchRequest, SearchGlobalRequest, GetFullChatRequest
-from telethon.tl.functions.channels import GetFullChannelRequest
-from telethon.tl.functions.users import GetFullUserRequest
+# from telethon.tl.functions.channels import GetFullChannelRequest
+# from telethon.tl.functions.users import GetFullUserRequest
 
 
 with open('keys.json', 'r') as file:
@@ -83,7 +83,7 @@ def get_full(name=1091219672):
 
 	return full.to_dict()
 
-def search(text='Керчь', count=2, mes_author=None, mes_type=None):
+def search(text, count, mes_author=None, mes_type=None):
 	count = int(count)
 
 	# if mes_author:

@@ -81,11 +81,10 @@ def get_styled(req):
 	for i in req:
 		entity = get_entity(i.chat_id)
 
-		all.append({
+		req = {
 			'source': {
 				'dialogs': i.chat_id,
 				'id': entity.id,
-				'name': '{} {}'.format(entity.first_name, entity.last_name) if i.is_private else entity.title,
 			},
 			'id': i.id,
 
@@ -93,7 +92,20 @@ def get_styled(req):
 
 			'time': time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(i.date.timestamp())),
 			'views': i.views,
-		})
+		}
+
+		if i.is_private:
+			req['source']['name'] = entity.first_name
+			if entity.last_name:
+				req['source']['name'] += ' ' + entity.last_name
+		
+		else:
+			req['source']['name'] = entity.title
+
+		all.append(req)
+
+		
+
 
 	return all
 

@@ -1,6 +1,7 @@
 import sys
 import json
 import datetime
+import time
 
 from telethon import TelegramClient, sync
 from telethon.tl.types import InputPeerEmpty # , Channel, Chat, User, InputUserEmpty, InputPeerSelf, InputMessagesFilterEmpty
@@ -54,7 +55,13 @@ def get_me():
 
 # 't.me/nickname' / '@nickname' / id
 def get_entity(name):
-	return client.get_entity(name)
+	def convert(cont):
+		try:
+			return int(cont)
+		except:
+			return cont
+
+	return client.get_entity(convert(name))
 
 # # История сообщений
 
@@ -117,6 +124,50 @@ def search(text, count=None, mes_author=None, mes_type=None):
 		)).messages
 
 	return messages
+
+def mes2json(source, message, param_source=True):
+	req = {
+		'id': message.id,
+
+		'body': message.message,
+
+		'author': {
+			'id': message.from_id,
+		},
+
+		'time': message.date.timestamp(),
+	}
+
+	if param_source:
+		req['source'] = {'id': source}
+
+	if message.views:
+		req['reactions'] = {'views': {'count': message.views}}
+
+	return req
+
+def history(name, limit=100):
+	source = get_entity(name).id
+	processor = lambda message: mes2json(source, message, False)
+
+	messages = []
+	iteration = 0
+
+	while True:
+		messages.extend(map(processor, client.get_messages(source, limit=limit, add_offset=iteration * limit)))
+
+		iteration += 1
+
+		if len(messages) != iteration * limit:
+			break
+	
+		print(len(messages))
+		time.sleep(1) #
+	
+	return messages[::-1]
+
+def dialogs():
+	return [i.id for i in client.get_dialogs()]
 
 
 if __name__ == '__main__':

@@ -5,10 +5,12 @@
 **/*.session
 **/*.session-journal
 
+.vscode/
+
 # Ключи
 
 keys.json
 
 # Виртуальное окружение
 
-**/flask/
+flask/

@@ -49,18 +49,19 @@
 <div class="card">
 	<div class="card-body">
 
-	<h5><b>{{ i.source.name }}</b> ({{ i.source.dialogs }} / {{ i.source.id }})</h5>
+	<h5><b>{{ i.source.name }}</b> ({{ i.source.dialogs }} / {{ i.id }})</h5>
 	
 	<!-- #{{ i.id }} &nbsp; | &nbsp; {{ i.time }} &nbsp; | &nbsp; {{ i.views }} просмотров</h6> -->
-	<span class="badge badge-success">
-		#{{ i.id }}
-	</span>
+
 	<span class="badge badge-success">
 		{{ i.time }}
 	</span>
-	<span class="badge badge-success">
-		{{ i.views }} просмотров
-	</span>
+
+	{% if i.views %}
+		<span class="badge badge-success">
+			{{ i.views }} просмотров
+		</span>
+	{% endif %}
 
 	<br>
 	{{ i.cont }}

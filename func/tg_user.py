@@ -128,15 +128,16 @@ def search(text, count=None, mes_author=None, mes_type=None):
 def mes2json(source, message, param_source=True):
 	req = {
 		'id': message.id,
-
-		'body': message.message,
-
-		'author': {
-			'id': message.from_id,
-		},
-
-		'time': message.date.timestamp(),
+		'time': int(message.date.timestamp()),
 	}
+
+	if message.message:
+		req['body'] = message.message
+	else:
+		req['body'] = ''
+	
+	if message.from_id:
+		req['author'] = {'id': message.from_id}
 
 	if param_source:
 		req['source'] = {'id': source}

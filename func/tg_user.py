@@ -3,6 +3,7 @@ import json
 import datetime
 import time
 
+import re
 from telethon import TelegramClient, sync
 from telethon.tl.types import InputPeerEmpty # , Channel, Chat, User, InputUserEmpty, InputPeerSelf, InputMessagesFilterEmpty
 from telethon.tl.functions.messages import SearchGlobalRequest # , SearchRequest, GetFullChatRequest
@@ -133,6 +134,13 @@ def mes2json(source, message, param_source=True):
 
 	if message.message:
 		req['body'] = message.message
+
+		if message.mentioned:
+			mentions = [{'id': get_entity(i).id} for i in re.findall(r'@[0-9_]*[a-zA-Z_]+[0-9_]*', message.message)]
+
+			if mentions:
+				req['mentions'] = mentions
+
 	else:
 		req['body'] = ''
 	

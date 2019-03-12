@@ -9,10 +9,10 @@ dump = lambda cont: json.dumps(cont, ensure_ascii=False)
 # Политика
 # 'https://t.me/ATC_ATC', 'https://t.me/otsuka_bld', 'https://t.me/wwwproektmedia', 'https://t.me/kompr', 'https://t.me/deputatdumy', 'https://t.me/boilerroomchannel', 'https://t.me/lentadna', 'https://t.me/tv360ru', 'https://t.me/thebell_io'
 
-GROUPS = ('https://t.me/ATC_ATC', 'https://t.me/otsuka_bld', 'https://t.me/wwwproektmedia', 'https://t.me/kompr', 'https://t.me/deputatdumy', 'https://t.me/boilerroomchannel', 'https://t.me/lentadna', 'https://t.me/tv360ru', 'https://t.me/thebell_io')
+DIALOGS = (-270771762)
 
 
-for name in GROUPS:
+for name in DIALOGS:
 	name = get_entity(name).id
 
 	print('-'*100)

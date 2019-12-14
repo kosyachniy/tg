@@ -63,3 +63,8 @@ yarn-error.log*
 
 *.otf
 *.ttf
+
+## Репозитории
+
+ru2/
+spacy-ru/

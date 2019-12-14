@@ -4,7 +4,7 @@ import datetime
 import time
 
 import re
-from telethon import TelegramClient, sync
+from telethon import TelegramClient # , sync
 from telethon.tl.types import InputPeerEmpty # , Channel, Chat, User, InputUserEmpty, InputPeerSelf, InputMessagesFilterEmpty
 from telethon.tl.functions.messages import SearchGlobalRequest # , SearchRequest, GetFullChatRequest
 # from telethon.tl.functions.channels import GetFullChannelRequest

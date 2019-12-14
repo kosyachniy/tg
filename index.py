@@ -14,6 +14,7 @@ app = Flask(__name__)
 def index(text='Керчь'):
 	messages = search(text, 100)
 	# print(len(messages))
+	# print(messages[0])
 
 	return render_template('index.html',
 		user=get_me(),

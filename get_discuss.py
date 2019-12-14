@@ -79,11 +79,11 @@ def get_styled(req):
 	all = []
 	
 	for i in req:
-		entity = get_entity(i.chat_id)
+		entity = get_entity(i.to_id.channel_id)
 
 		req = {
 			'source': {
-				'dialogs': i.chat_id,
+				'dialogs': i.to_id.channel_id,
 				'id': entity.id,
 			},
 			'id': i.id,
@@ -94,12 +94,13 @@ def get_styled(req):
 			'views': i.views,
 		}
 
-		if i.is_private:
+		# if i.is_private:
+		try:
 			req['source']['name'] = entity.first_name
 			if entity.last_name:
 				req['source']['name'] += ' ' + entity.last_name
 		
-		else:
+		except: # else:
 			req['source']['name'] = entity.title
 
 		all.append(req)

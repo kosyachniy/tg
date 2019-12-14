@@ -19,6 +19,9 @@ export default function Header() {
 						<li className="nav-item dropdown">
 							<Link to="/" className="nav-link">Тепловая карта</Link>
 						</li>
+						<li className="nav-item dropdown">
+							<Link to="/trends" className="nav-link">Активность</Link>
+						</li>
 					</ul>
 					<ul className="nav navbar-nav navbar-right">
 						<li className="nav-item">	

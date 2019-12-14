@@ -1,12 +1,12 @@
 import React from 'react'
 
 import './style.css'
-import { api } from '../../func/api'
+// import { api } from '../../func/api'
 
 
-export default class Main extends React.Component {
+export default class Heatmap extends React.Component {
 	state = {
-		tags: [1,2,3,4,5,6,7,8,9],
+		tags: [],
 	}
 
 	componentWillMount() {

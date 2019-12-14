@@ -22,3 +22,4 @@ sio = SocketIO(app, async_mode=None)
 #
 
 from app import api
+from app import sockets

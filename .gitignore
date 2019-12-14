@@ -1,19 +1,69 @@
 # Кэш
 
+##  MacOS
+
 .DS_Store
+
+## Python
 
 __pycache__/
 *.pyc
-*.session
-*.session-journal
+
+## JS
+
+package-lock.json
+dist/
+build/
+
+## Jupyter Notebook
+
+.ipynb_checkpoints/
+
+## Редакторы
 
 .idea/
 .vscode/
 
-# Ключи
+## 
 
+*.session
+*.session-journal
+
+# Ключи и настройки
+
+keys.py
 keys.json
+keys.js
+
+# Данные
+
+# Библиотеки
 
 # Виртуальное окружение
 
-flask/
+env/
+node_modules/
+
+/.pnp
+.pnp.js
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Логирование
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Авторские права
+
+## Шрифты
+
+*.otf
+*.ttf
+
+# Разработка
+
+-/

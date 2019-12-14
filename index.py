@@ -1,5 +1,3 @@
-#!flask/bin/python
-
 from flask import Flask, render_template, request, redirect
 
 from func.tg_user import get_me, search
@@ -38,5 +36,4 @@ app.run(
 	port=80,
 	debug=True,
 	threaded=True,
-	# ssl_context=context,
 )

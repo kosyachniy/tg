@@ -5,12 +5,14 @@ import time
 
 import re
 from telethon import TelegramClient
-from telethon.tl.types import InputPeerEmpty # , Channel, Chat, User, InputUserEmpty, InputPeerSelf, InputMessagesFilterEmpty
-from telethon.tl.functions.messages import SearchGlobalRequest # , SearchRequest, GetFullChatRequest
+from telethon.tl.types import InputPeerChannel, InputMessagesFilterEmpty # InputPeerEmpty # , Channel, Chat, User, InputUserEmpty, InputPeerSelf, InputMessagesFilterEmpty
+from telethon.tl.functions.messages import SearchGlobalRequest, SearchRequest # , GetFullChatRequest
 # from telethon.tl.functions.channels import GetFullChannelRequest
 # from telethon.tl.functions.users import GetFullUserRequest
+from telethon.tl.functions.channels import GetFullChannelRequest
 
 from keys import TG
+from sets import CHATS
 
 
 client = TelegramClient('main', TG['app_id'], TG['app_hash']).start()
@@ -85,22 +87,69 @@ def get_entity(name):
 
 # 	return full.to_dict()
 
+# Список крупных чатов
+
+def only_chats():
+	chats = []
+
+	for i in client.get_dialogs():
+		entity = i.entity.to_dict()
+
+
+		if (entity['_'] == 'Channel' and entity['megagroup']): # or (entity['_'] == 'Chat'):
+			res = {
+				'id': entity['id'],
+				'type': entity['_'],
+				'username': entity['username'] if 'username' in entity else None,
+				'title': entity['title'],
+				'members': client(GetFullChannelRequest(channel=get_entity(entity['id']))).full_chat.participants_count,
+			}
+
+			chat = {
+				'channel_id': res['id'],
+				'access_hash': entity['access_hash'],
+			}
+
+			print(res)
+			
+			if res['members'] > 500:
+				chats.append(chat)
+
+	return chats
+
 # Поиск
 
 def search(text, count=100, mes_author=None, mes_type=None):
 	count = int(count)
+	re_count = count + 0
 	messages = []
 
-	if not count or count > 100:
+	for chat in CHATS:
+		print('!1', chat)
+		count = re_count + 0
 		offset = 0
 		while True:
 			count_new = 100 if not count else min(100, count)
 
-			messages_new = client(SearchGlobalRequest(
+			# messages_new = client(SearchGlobalRequest(
+			# 	q=text,
+			# 	offset_date=datetime.datetime.now(),
+			# 	offset_peer=InputPeerChannel(**chat), # InputPeerEmpty(),
+			# 	offset_id=offset,
+			# 	limit=count_new,
+			# )).messages
+
+			messages_new = client(SearchRequest(
+				peer=chat['channel_id'],
 				q=text,
-				offset_date=datetime.datetime.now(),
-				offset_peer=InputPeerEmpty(),
+				filter=InputMessagesFilterEmpty(),
+				min_date=datetime.datetime(2017, 1, 1),
+				max_date=datetime.datetime(2019, 12, 30),
 				offset_id=offset,
+				add_offset=0,
+				max_id=0,
+				min_id=0,
+				hash=0, # chat['access_hash'],
 				limit=count_new,
 			)).messages
 
@@ -113,15 +162,6 @@ def search(text, count=100, mes_author=None, mes_type=None):
 				break
 
 			offset += 100
-
-	else:
-		messages = client(SearchGlobalRequest(
-			q=text,
-			offset_date=datetime.datetime.now(),
-			offset_peer=InputPeerEmpty(),
-			offset_id=0,
-			limit=count,
-		)).messages
 
 	return messages
 

@@ -21,7 +21,7 @@ def analytics(this, **x):
 
 	# Сохранение
 
-	discussion_id = next_id('discussion')
+	discussion_id = next_id('discussions')
 
 	discussion = {
 		'id': discussion_id,

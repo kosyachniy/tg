@@ -74,17 +74,13 @@ def search(discussion_id):
 
     for tag in tags:
         for post in tg_search(tag):
-            # message = {
-            #     'tg_id': post.id,
-            #     'source': post.to_id.channel_id,
-            #     'cont': post.message,
-            #     'time': post.date.timestamp,
-            #     'reactions': {
-            #         'views': {
-            #             'count': post.views,
-            #         }
-            #     }
-            # }
+            try:
+                message = get_json(post, tag)
+            except:
+                continue
 
-            message = get_json(post, tag)
-            print(message)
+            message['discussion'] = discussion_id
+            message['mood'] = 0
+            message['topic'] = ''
+
+            db['messages'].insert_one(message)

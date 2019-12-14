@@ -64,7 +64,6 @@ yarn-error.log*
 *.otf
 *.ttf
 
-## Репозитории
+# Разработка
 
-ru2/
-spacy-ru/
+-/

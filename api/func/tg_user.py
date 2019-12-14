@@ -5,7 +5,7 @@ import time
 
 import re
 from telethon import TelegramClient
-from telethon.tl.types import InputPeerChannel, InputMessagesFilterEmpty # InputPeerEmpty # , Channel, Chat, User, InputUserEmpty, InputPeerSelf, InputMessagesFilterEmpty
+from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputMessagesFilterEmpty # , Channel, Chat, User, InputUserEmpty, InputPeerSelf, InputMessagesFilterEmpty
 from telethon.tl.functions.messages import SearchGlobalRequest, SearchRequest # , GetFullChatRequest
 # from telethon.tl.functions.channels import GetFullChannelRequest
 # from telethon.tl.functions.users import GetFullUserRequest
@@ -164,6 +164,48 @@ def search(text, count=100, mes_author=None, mes_type=None):
 			offset += 100
 
 	return messages
+
+# Глобальный поиск
+
+def search_global(text, count=100, mes_author=None, mes_type=None):
+	count = int(count)
+	messages = []
+
+	if not count or count > 100:
+		offset = 0
+		while True:
+			count_new = 100 if not count else min(100, count)
+
+			messages_new = client(SearchGlobalRequest(
+				q=text,
+				offset_date=datetime.datetime.now(),
+				offset_peer=InputPeerEmpty(),
+				offset_id=offset,
+				limit=count_new,
+			)).messages
+
+			messages.extend(messages_new)
+
+			if count:
+				count -= count_new
+
+			if len(messages_new) < 100 or count == 0:
+				break
+
+			offset += 100
+
+	else:
+		messages = client(SearchGlobalRequest(
+			q=text,
+			offset_date=datetime.datetime.now(),
+			offset_peer=InputPeerEmpty(),
+			offset_id=0,
+			limit=count,
+		)).messages
+
+	return messages
+
+#
 
 def mes2json(source, message, param_source=True):
 	req = {

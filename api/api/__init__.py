@@ -5,14 +5,15 @@ import api._error as Error
 from api._func import get_language
 
 import api.discussions as discussions
+import api.trends as trends
 
 
 class API():
-	def __init__(self, server, client, token): # ip, socketio=None, language=0, ip_remote=None):
+	def __init__(self, server, client, token, socketio): # ip, language=0, ip_remote=None):
 		self.timestamp = time.time()
 		self.server = server
 		self.client = client
-		# self.socketio = socketio
+		self.socketio = socketio
 		# self.ip = ip
 		self.token = token
 		# self.language = language

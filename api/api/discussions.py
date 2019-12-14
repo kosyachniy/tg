@@ -1,5 +1,3 @@
-import time
-
 from mongodb import db
 from api._error import ErrorInvalid
 from api._func import check_params, next_id

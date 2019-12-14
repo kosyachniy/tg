@@ -1,3 +1,7 @@
+.navbar {
+	max-height: 56px;
+}
+
 .navbar-brand img, .nav-link img {
 	height: 25px;
 	margin-top: -5px;
@@ -10,6 +14,10 @@
 @media all and (max-width: 991px) {
 	.navbar .badge {
 		margin: 0 0 0 10px;
+	}
+
+	.navbar-nav {
+		margin-top: 0 !important;
 	}
 }
 

@@ -125,7 +125,7 @@ def search(text, count=100, mes_author=None, mes_type=None):
 	messages = []
 
 	for chat in CHATS:
-		print('!1', chat)
+		# print('!1', chat)
 		count = re_count + 0
 		offset = 0
 		while True:

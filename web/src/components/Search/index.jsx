@@ -13,7 +13,6 @@ export default class Search extends React.Component {
 	}
 
 	render() {
-		console.log(this.state)
 		if (this.state.submit) {
 			return (
 				<Redirect to={`/${this.state.type}/${this.state.search}`} />

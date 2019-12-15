@@ -19,10 +19,9 @@ export default class Trends extends React.Component {
 	componentWillMount() {
 		const socketIO = openSocket(`${socket.link}main`);
 
-		socketIO.emit('trends', {search: this.state.search})
+		socketIO.emit('trends', {search: this.state.search, token: localStorage.getItem('token')})
 
 		socketIO.on('trends', (res) => {
-			console.log(res);
 			this.setState({ loading: false, posts: res.posts, graph: res.graph });
 		})
 	}
@@ -43,7 +42,6 @@ export default class Trends extends React.Component {
 			this.setState({ graphed: true });
 
 			let ctx = document.getElementById('chart').getContext('2d');
-			console.log('HEY', ctx);
 			new Chart(ctx, {
 				type: 'line',
 				data: {
@@ -66,7 +64,6 @@ export default class Trends extends React.Component {
 	}
 
 	render() {
-		console.log(this.state);
 		if (this.state.loading) {
 			return (
 				<>

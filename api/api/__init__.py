@@ -4,7 +4,7 @@ from mongodb import db
 import api._error as Error
 from api._func import get_language
 
-import api.discussions as discussions
+import api.heatmap as heatmap
 import api.trends as trends
 
 
@@ -57,7 +57,7 @@ class API():
 			'params': params,
 		}
 
-		db['actions'].insert(req)
+		db['actions'].insert_one(req)
 	
 		# Метод API
 

@@ -13,8 +13,6 @@ export default class Header extends React.Component {
 	}
 
 	render() {
-		// console.log(this.state);
-
 		if (this.state.submit) {
 			return (
 				<Redirect to={`/${this.state.type}/${this.state.search}`} />

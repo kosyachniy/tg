@@ -21,7 +21,7 @@ export default function api(that, method, params={}, handlerSuccess=()=>{}, hand
 		'params': params,
 	}
 
-	json['token'] = JSON.parse(localStorage.getItem('token'))
+	json['token'] = localStorage.getItem('token')
 
 	serverRequest(json).then((res) => handlerResult(that, res.data, handlerSuccess, handlerError))
 }

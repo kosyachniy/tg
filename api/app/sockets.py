@@ -1,13 +1,14 @@
 from app import app, sio
 from flask import request
 
-import os
 import time
-import re
 
+from mongodb import db
 from func.tg_user import search_global
+from api._func import next_id
 from api.get_discuss import get_styled
 from api.visualisation import timeline
+from api.search import search
 
 
 # Socket.IO
@@ -19,7 +20,66 @@ thread = None
 thread_lock = Lock()
 
 
-# Онлайн пользователи
+# Теплвоая карта
+
+
+@sio.on('heatmap', namespace='/main')
+def heatmap(x):
+	# global thread
+	# with thread_lock:
+	# 	if thread is None:
+	# 		thread = sio.start_background_task(target=background_thread)
+
+	sid = request.sid
+	timestamp = time.time()
+
+	# Отслеживание
+
+	req = {
+		'time': timestamp,
+		'user': x['token'],
+		'method': 'heatmap',
+		'params': {'tags': x['tags']},
+	}
+
+	db['actions'].insert_one(req)
+
+	#
+
+	if type(x['tags']) == str:
+		x['tags'] = [x['tags']]
+
+	discussion_id = next_id('discussions')
+
+	discussion = {
+		'id': discussion_id,
+		'tags': x['tags'],
+		'time': timestamp,
+		'user': x['token'],
+	}
+
+	db['discussions'].insert_one(discussion)
+
+	# Обработка
+
+	print('HEAT', '1', x['tags'])
+	search(discussion_id)
+	print('HEAT', '2')
+	texts, sets, corpus, freq = vectorize(discussion_id)
+	print('HEAT', '3', '\nDataset: {}\nCorpus: {}\n'.format(len(sets), len(corpus)))
+
+	# Ответ
+
+	res = {
+		'dataset': len(sets),
+		'corpus': len(corpus),
+		'lda': [],
+		'heatmap': [],
+	}
+
+	sio.emit('heatmap', res, room=sid, namespace='/main')
+
+# Тренды
 
 @sio.on('trends', namespace='/main')
 def trends(x):
@@ -29,14 +89,26 @@ def trends(x):
 	# 		thread = sio.start_background_task(target=background_thread)
 
 	sid = request.sid
+	timestamp = time.time()
 
-	print('!1')
+	# Отслеживание
+
+	req = {
+		'time': timestamp,
+		'user': x['token'],
+		'method': 'trends',
+		'params': {'search': x['search']},
+	}
+
+	#
+
+	print('TREND', '1', x['search'])
 	messages = search_global(x['search'], 100)
-	print('!2')
+	print('TREND', '2')
 	posts = get_styled(messages)
-	print('!3')
+	print('TREND', '3')
 	graph = timeline(messages)
-	print('!4')
+	print('TREND', '4')
 
 	# Ответ
 

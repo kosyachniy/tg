@@ -7,7 +7,7 @@ from api.search import search
 
 # Получение
 
-def analytics(this, **x):
+def get(this, **x):
 	# Проверка параметров
 
 	check_params(x, (

@@ -8,6 +8,8 @@ from func.tg_user import search_global
 from api._func import next_id
 from api.get_discuss import get_styled
 from api.visualisation import timeline
+from api.vectorize import vectorize
+from api.lda import lda
 from api.search import search
 
 
@@ -72,6 +74,20 @@ def heatmap(x):
 		message['preprocessed'] = sets[i]
 		db['messages'].save(message)
 	print('HEAT', '3', '\nDataset: {}\nCorpus: {}\n'.format(len(sets), len(corpus)))
+
+	lda_model, corpus, data_ready, data_inds, topics, prob = lda(discussion_id)
+	topics_list = list(map(lambda x: x[1], lda_model.print_topics()))
+	discussion = db['discussions'].find_one({'id': discussion_id})
+	discussion['topics'] = topics_list
+	db['discussions'].save(discussion)
+	for i in range(len(inds)):
+		message = db['messages'].find_one({'_id': inds[i]})
+		message['topic'] = {
+			'name': topics[i],
+			'probability': round(prob[i], 3),
+		}
+		db['messages'].save(message)
+	print('HEAT', '4', '\Topics: {}'.format(topics_list)
 
 	# Ответ
 

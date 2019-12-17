@@ -80,7 +80,5 @@ def search(discussion_id):
                 continue
 
             message['discussion'] = discussion_id
-            message['mood'] = 0
-            message['topic'] = ''
 
             db['messages'].insert_one(message)

@@ -146,4 +146,10 @@ if __name__ == '__main__':
 	compilation = 7
 	texts, sets, inds, corpus, freq = vectorize(compilation)
 
+	for i in range(len(inds)):
+		print(inds[i], sets[i])
+		message = db['messages'].find_one({'_id': inds[i]})
+		message['preprocessed'] = sets[i]
+		db['messages'].save(message)
+
 	print('\nDataset: {}\nCorpus: {}\n'.format(len(sets), len(corpus)))

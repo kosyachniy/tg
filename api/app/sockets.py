@@ -65,7 +65,12 @@ def heatmap(x):
 	print('HEAT', '1', x['tags'])
 	search(discussion_id)
 	print('HEAT', '2')
-	texts, sets, corpus, freq = vectorize(discussion_id)
+
+	texts, sets, inds, corpus, freq = vectorize(discussion_id)
+	for i in range(len(inds)):
+		message = db['messages'].find_one({'_id': inds[i]})
+		message['preprocessed'] = sets[i]
+		db['messages'].save(message)
 	print('HEAT', '3', '\nDataset: {}\nCorpus: {}\n'.format(len(sets), len(corpus)))
 
 	# Ответ

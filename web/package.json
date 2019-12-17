@@ -1,0 +1,37 @@
+{
+	"name": "web",
+	"author": "kosyachniy",
+	"version": "0.1.0",
+	"dependencies": {
+		"@ckeditor/ckeditor5-react": "^1.1.1",
+		"@kosyachniy/ckeditor": "^1.0.1",
+		"axios": "^0.18.0",
+		"bootstrap": "^4.3.1",
+		"chart.js": "^2.9.3",
+		"jquery": "^3.4.1",
+		"popper.js": "^1.16.0",
+		"react": "^16.8.4",
+		"react-dom": "^16.8.4",
+		"react-html-parser": "^2.0.2",
+		"react-i18next": "^10.13.1",
+		"react-mathjax-preview": "^0.1.16",
+		"react-router-dom": "^5.0.0",
+		"react-scripts": "2.1.8",
+		"socket.io-client": "^2.3.0"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject"
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"browserslist": [
+		">0.2%",
+		"not dead",
+		"not ie <= 11",
+		"not op_mini all"
+	]
+}

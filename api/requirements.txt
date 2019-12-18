@@ -31,7 +31,7 @@ pymongo==3.9.0
 pymorphy2==0.8
 pymorphy2-dicts==2.4.393442.3710985
 python-dateutil==2.8.0
-python-engineio==3.5.1
+python-engineio==3.8.2.post1
 python-socketio==3.1.2
 requests==2.22.0
 rsa==4.0

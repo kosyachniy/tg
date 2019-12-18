@@ -20,17 +20,22 @@ export default class Search extends React.Component {
 		}
 
 		return (
-			<input
-				className="form-control mr-sm-2"
-				type="search"
-				placeholder="Поиск"
-				onChange={(event) => {this.setState({ search: event.target.value })}}
-				onKeyDown={(event) => {
-					if (event.key === 'Enter' && this.state.search.length > 0) {
-						this.setState({ submit: true });
-					}
-				}}
-			/>
+			<>
+				{ this.state.type === 'heatmap' && (
+					<p>Добавить на обработку:</p>
+				)}
+				<input
+					className="form-control mr-sm-2"
+					type="search"
+					placeholder={ this.state.type === 'heatmap' ? "Ключевое слово" : "Поиск" }
+					onChange={(event) => {this.setState({ search: event.target.value })}}
+					onKeyDown={(event) => {
+						if (event.key === 'Enter' && this.state.search.length > 0) {
+							this.setState({ submit: true });
+						}
+					}}
+				/>
+			</>
 		)
 	}
 }

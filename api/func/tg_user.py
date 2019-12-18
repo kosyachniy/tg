@@ -139,19 +139,22 @@ def search(text, count=100, mes_author=None, mes_type=None):
 			# 	limit=count_new,
 			# )).messages
 
-			messages_new = client(SearchRequest(
-				peer=chat['channel_id'],
-				q=text,
-				filter=InputMessagesFilterEmpty(),
-				min_date=datetime.datetime(2017, 1, 1),
-				max_date=datetime.datetime(2019, 12, 30),
-				offset_id=offset,
-				add_offset=0,
-				max_id=0,
-				min_id=0,
-				hash=0, # chat['access_hash'],
-				limit=count_new,
-			)).messages
+			try:
+				messages_new = client(SearchRequest(
+					peer=chat['channel_id'],
+					q=text,
+					filter=InputMessagesFilterEmpty(),
+					min_date=datetime.datetime(2017, 1, 1),
+					max_date=datetime.datetime(2019, 12, 30),
+					offset_id=offset,
+					add_offset=0,
+					max_id=0,
+					min_id=0,
+					hash=0, # chat['access_hash'],
+					limit=count_new,
+				)).messages
+			except:
+				break
 
 			messages.extend(messages_new)
 

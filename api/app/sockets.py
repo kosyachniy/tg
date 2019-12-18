@@ -80,20 +80,21 @@ def heatmap(x):
 	discussion = db['discussions'].find_one({'id': discussion_id})
 	discussion['topics'] = topics_list
 	db['discussions'].save(discussion)
-	for i in range(len(inds)):
-		message = db['messages'].find_one({'_id': inds[i]})
+	for i in range(len(data_inds)):
+		message = db['messages'].find_one({'_id': data_inds[i]})
 		message['topic'] = {
 			'name': topics[i],
-			'probability': round(prob[i], 3),
+			'probability': float(round(prob[i], 3)),
 		}
 		db['messages'].save(message)
-	print('HEAT', '4', '\Topics: {}'.format(topics_list)
+	print('HEAT', '4', '\Topics: {}'.format(topics_list))
 
 	# Ответ
 
 	res = {
 		'dataset': len(sets),
 		'corpus': len(corpus),
+		'topics': topics_list,
 		'lda': [],
 		'heatmap': [],
 	}

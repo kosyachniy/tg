@@ -1,3 +1,9 @@
+#main p {
+	margin-top: 15px;
+	margin-bottom: -15px;
+	font-size: 1.2rem;
+}
+
 #main input {
 	margin-top: 30px;
 }

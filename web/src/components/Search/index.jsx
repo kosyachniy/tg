@@ -1,41 +1,14 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
-
-import './style.css';
+import { connect } from 'react-redux';
+import Search from './Search'
 
 
-export default class Search extends React.Component {
-	state = {
-		search: '',
-		submit: false,
-		type: this.props.type,
-		// type: document.location.pathname.split('/')[1],
-	}
+// AppContainer.jsx
+const mapStateToProps = state => ({
+	system: state.system,
+});
 
-	render() {
-		if (this.state.submit) {
-			return (
-				<Redirect to={`/${this.state.type}/${this.state.search}`} />
-			)
-		}
+const SearchContainer = connect(
+	mapStateToProps,
+)(Search);
 
-		return (
-			<>
-				{ this.state.type === 'heatmap' && (
-					<p>Добавить на обработку:</p>
-				)}
-				<input
-					className="form-control mr-sm-2"
-					type="search"
-					placeholder={ this.state.type === 'heatmap' ? "Ключевое слово" : "Поиск" }
-					onChange={(event) => {this.setState({ search: event.target.value })}}
-					onKeyDown={(event) => {
-						if (event.key === 'Enter' && this.state.search.length > 0) {
-							this.setState({ submit: true });
-						}
-					}}
-				/>
-			</>
-		)
-	}
-}
+export default SearchContainer;

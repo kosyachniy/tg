@@ -1,5 +1,7 @@
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { store } from './redus'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 
@@ -19,10 +21,12 @@ export default class App extends React.Component {
 
 	render() {
 		return (
-			<BrowserRouter>
-				<Header />
-				<Body />
-			</BrowserRouter>
+			<Provider store={store}>
+				<BrowserRouter>
+					<Header />
+					<Body />
+				</BrowserRouter>
+			</Provider>
 		)
 	}
 }

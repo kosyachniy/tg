@@ -8,31 +8,38 @@ import { name } from '../../../sets'
 export default class Header extends React.Component {
 	state = {
 		submit: false,
-		search: '',
-		// type: document.location.pathname.split('/')[1],
 	}
 
 	componentWillMount() {
-		const type = document.location.pathname.split('/')[1];
-		this.props.changePath(type);
+		const path = document.location.pathname.split('/');
+
+		const type = path[1];
+		this.props.changeType(type);
+
+		const request = path.length > 2 ? path[2] : '';
+		this.props.search(request);
 	}
 
-	changePath = (path) => {
+	changeType = (path) => {
 		// this.setState({ type: path });
-		this.props.changePath(path);
+		this.props.changeType(path);
+		this.props.search('');
 	}
 
 	render() {
+		const { type, search } = this.props.system;
+		console.log(type, search);
+
 		if (this.state.submit) {
 			return (
-				<Redirect to={`/${this.props.system.path}/${this.state.search}`} />
+				<Redirect to={`/${type}/${this.props.system.search}`} />
 			)
 		}
 
 		return (
 			<nav className="navbar navbar-expand-md navbar-light bg-light sticky-top">
 				<div className="container">
-					<Link to="/" className="navbar-brand">{ name }</Link>
+					<Link to="/" className="navbar-brand" onClick={ () => {this.changeType('heatmap')} }>{ name }</Link>
 					<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 						<span className="navbar-toggler-icon"></span>
 					</button>
@@ -40,13 +47,13 @@ export default class Header extends React.Component {
 					<div className="collapse navbar-collapse" id="navbarTogglerDemo02">
 						<ul className="navbar-nav mr-auto mt-2 mt-lg-0">
 							<li className="nav-item dropdown">
-								<Link to="/heatmap" className="nav-link" onClick={ () => {this.changePath('heatmap')} }>Тепловая карта</Link>
+								<Link to="/heatmap" className="nav-link" onClick={ () => {this.changeType('heatmap')} }>Тепловая карта</Link>
 							</li>
 							<li className="nav-item dropdown">
-								<Link to="/trends" className="nav-link" onClick={ () => {this.changePath('trends')} }>Активность</Link>
+								<Link to="/trends" className="nav-link" onClick={ () => {this.changeType('trends')} }>Активность</Link>
 							</li>
 						</ul>
-						{ this.props.system.path === 'trends' && (
+						{ (type === 'trends' && search.length > 0) && (
 							<ul className="nav navbar-nav navbar-right">
 								<li className="nav-item">
 									<input
@@ -55,7 +62,7 @@ export default class Header extends React.Component {
 										placeholder="Поиск"
 										onChange={(event) => {this.setState({ search: event.target.value })}}
 										onKeyDown={(event) => {
-											if (event.key === 'Enter' && this.state.search.length > 0) {
+											if (event.key === 'Enter' && this.props.system.search.length > 0) {
 												this.setState({ submit: true });
 											}
 										}}

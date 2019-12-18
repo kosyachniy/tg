@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-	changePath,
+	changeType, search,
 } from '../../redus';
 
 import Header from './Header';
@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	changePath,
+	changeType, search,
 };
 
 const HeaderContainer = connect(

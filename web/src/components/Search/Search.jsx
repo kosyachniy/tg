@@ -1,5 +1,6 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import api from '../../func/api'
 
 import './style.css';
 
@@ -8,8 +9,17 @@ export default class Search extends React.Component {
 	state = {
 		search: '',
 		submit: false,
+		list: [],
 		// type: this.props.type,
 		// type: document.location.pathname.split('/')[1],
+	}
+
+	componentWillMount() {
+		const handlerSuccess = (that, res) => {
+			this.setState({ list: res.result.heatmaps });
+		};
+
+		api(this, 'heatmap.get', {}, handlerSuccess);
 	}
 
 	render() {
@@ -36,6 +46,18 @@ export default class Search extends React.Component {
 						}
 					}}
 				/>
+				
+				{ (this.props.system.type == 'heatmap' && this.state.list) && (
+					<>
+						<br />
+						<p>Обработанные запросы:</p>
+						<ul>
+							{ this.state.list.map((el) => (
+								<li key={el.id}><Link to={`/${this.props.system.type}/${el.tags[0]}`}>{ el.tags[0] }</Link></li>
+							))}
+						</ul>
+					</>
+				)}
 			</>
 		)
 	}

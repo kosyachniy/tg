@@ -58,6 +58,7 @@ def heatmap(x):
 		'tags': x['tags'],
 		'time': timestamp,
 		'user': x['token'],
+		'status': 0,
 	}
 
 	db['discussions'].insert_one(discussion)
@@ -68,12 +69,20 @@ def heatmap(x):
 	search(discussion_id)
 	print('HEAT', '2')
 
+	discussion = db['discussions'].find_one({'id': discussion_id})
+	discussion['status'] = 1
+	db['discussions'].save(discussion)
+
 	texts, sets, inds, corpus, freq = vectorize(discussion_id)
 	for i in range(len(inds)):
 		message = db['messages'].find_one({'_id': inds[i]})
 		message['preprocessed'] = sets[i]
 		db['messages'].save(message)
 	print('HEAT', '3', '\nDataset: {}\nCorpus: {}\n'.format(len(sets), len(corpus)))
+
+	discussion = db['discussions'].find_one({'id': discussion_id})
+	discussion['status'] = 2
+	db['discussions'].save(discussion)
 
 	lda_model, corpus, data_ready, data_inds, topics, prob = lda(discussion_id)
 	topics_list = list(map(lambda x: x[1], lda_model.print_topics()))
@@ -89,17 +98,45 @@ def heatmap(x):
 		db['messages'].save(message)
 	print('HEAT', '4', '\Topics: {}'.format(topics_list))
 
-	# Ответ
+	discussion = db['discussions'].find_one({'id': discussion_id})
+	discussion['status'] = 3
+	db['discussions'].save(discussion)
 
-	res = {
-		'dataset': len(sets),
-		'corpus': len(corpus),
-		'topics': topics_list,
-		'lda': [],
-		'heatmap': [],
+	topics = {i: 0 for i, el in enumerate(discussion['topics'])}
+
+	db_condition = {
+		'discussion': discussion_id,
+		'topic': {'$exists': True},
 	}
+	db_filter = {
+		'_id': False,
+		'topic.name': True,
+	}
+	messages = [i for i in db['messages'].find(db_condition, db_filter)]
 
-	sio.emit('heatmap', res, room=sid, namespace='/main')
+	mes_all = len(messages)
+
+	for message in messages:
+		topics[message['topic']['name']] += 1
+
+	discussion['result'] = {
+		discussion['topics'][i]: topics[i] / mes_all
+	for i, topic in enumerate(discussion['topics'])}
+
+	discussion['status'] = 4
+	db['discussions'].save(discussion)
+
+	# # Ответ
+
+	# res = {
+	# 	'dataset': len(sets),
+	# 	'corpus': len(corpus),
+	# 	'topics': topics_list,
+	# 	'lda': [],
+	# 	'heatmap': [],
+	# }
+
+	# sio.emit('heatmap', res, room=sid, namespace='/main')
 
 # Тренды
 

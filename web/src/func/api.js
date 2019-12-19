@@ -23,5 +23,7 @@ export default function api(that, method, params={}, handlerSuccess=()=>{}, hand
 
 	json['token'] = localStorage.getItem('token')
 
+	console.log(json);
+
 	serverRequest(json).then((res) => handlerResult(that, res.data, handlerSuccess, handlerError))
 }

@@ -37,19 +37,6 @@ export default class Heatmap extends React.Component {
 	}
 
 	render() {
-		if (this.state.loading) {
-			return (
-				<>
-					<br /><br />
-
-					Загрузка.. ({ Math.round(this.state.progress) }%)
-					<div className="progress">
-						<div className="progress-bar bg-warning" role="progressbar" style={ {width: `${this.state.progress}%`} } aria-valuenow={this.state.progress} aria-valuemin="0" aria-valuemax="100"></div>
-					</div>
-				</>
-			)
-		}
-
 		return (
 			<>
 				<br /><hr /><br />

@@ -17,10 +17,15 @@ def gets(this, **x):
 	}
 	heatmaps = list(db['discussions'].find({'status': 5}, db_filter).sort('time', -1))
 
+	# Неудачные
+
+	failed = list(db['discussions'].find({'status': 4}, db_filter).sort('time', -1))
+
 	# Ответ
 
 	res = {
 		'heatmaps': heatmaps,
+		'failed': failed,
 	}
 
 	return res

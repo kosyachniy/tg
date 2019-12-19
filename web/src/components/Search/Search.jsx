@@ -16,6 +16,7 @@ export default class Search extends React.Component {
 			search: '',
 			submit: false,
 			list: [],
+			failed: [],
 		}
 
 		this.socketIO = null;
@@ -23,7 +24,7 @@ export default class Search extends React.Component {
 
 	componentWillMount() {
 		const handlerSuccess = (that, res) => {
-			this.setState({ list: res.result.heatmaps });
+			this.setState({ list: res.result.heatmaps, failed: res.result.failed, });
 		};
 
 		api(this, 'heatmap.gets', {}, handlerSuccess);
@@ -61,7 +62,7 @@ export default class Search extends React.Component {
 						}
 					}}
 				/>
-				
+
 				{ (this.props.system.type === 'heatmap' && this.state.list) && (
 					<>
 						<br />
@@ -75,6 +76,20 @@ export default class Search extends React.Component {
 									>
 										{ el.tags[0] }
 									</Link>
+								</li>
+							))}
+						</ul>
+					</>
+				)}
+
+				{ (this.props.system.type === 'heatmap' && this.state.failed && this.state.failed.length > 0) && (
+					<>
+						<br />
+						<p>Запросы, сложные для обработки:</p>
+						<ul>
+							{ this.state.failed.map((el) => (
+								<li key={el.id}>
+									{ el.tags[0] }
 								</li>
 							))}
 						</ul>

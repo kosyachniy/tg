@@ -84,6 +84,7 @@ export default class Heatmap extends React.Component {
 										{ this.convertDate(time) }
 									</td>
 								))}
+								<td></td>
 							</tr>
 							{ this.state.table.map((line, ind) => (
 								<tr key={ind}>
@@ -96,9 +97,18 @@ export default class Heatmap extends React.Component {
 											}}>{ Math.round(el * 100) }%</td>
 										))
 									}
-									
+									<td>{ this.state.topics[ind] }</td>
 								</tr>
 							))}
+							<tr>
+								<td></td>
+								{ this.state.times.map(time => (
+									<td key={time}>
+										{ this.convertDate(time) }
+									</td>
+								))}
+								<td></td>
+							</tr>
 						</tbody>
 					</table>
 				</div>

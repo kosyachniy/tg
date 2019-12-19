@@ -8,6 +8,7 @@ import { name } from '../../../sets'
 export default class Header extends React.Component {
 	state = {
 		submit: false,
+		search: '',
 	}
 
 	componentWillMount() {
@@ -31,6 +32,7 @@ export default class Header extends React.Component {
 		console.log(type, search);
 
 		if (this.state.submit) {
+			console.log('REDIRECT')
 			return (
 				<Redirect to={`/${type}/${this.props.system.search}`} />
 			)
@@ -62,7 +64,9 @@ export default class Header extends React.Component {
 										placeholder="Поиск"
 										onChange={(event) => {this.setState({ search: event.target.value })}}
 										onKeyDown={(event) => {
-											if (event.key === 'Enter' && this.props.system.search.length > 0) {
+											if (event.key === 'Enter' && this.state.search.length > 0) {
+												console.log('!CHECK!')
+												this.props.search(this.state.search);
 												this.setState({ submit: true });
 											}
 										}}

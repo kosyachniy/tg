@@ -8,7 +8,7 @@ import './style.css';
 
 export default class Trends extends React.Component {
 	state = {
-		search: decodeURIComponent(document.location.pathname.split('/')[2]),
+		search: this.props.system.search, // decodeURIComponent(document.location.pathname.split('/')[2]),
 		loading: true,
 		progress: 0,
 		posts: [],

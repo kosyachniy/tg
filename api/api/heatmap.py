@@ -1,12 +1,14 @@
+from urllib.request import unquote
+
 from mongodb import db
-from api._error import ErrorInvalid
+from api._error import ErrorInvalid, ErrorWrong
 from api._func import check_params, next_id
 
 from api.search import search
 
 
 # Список
-def get(this, **x):
+def gets(this, **x):
 	db_filter = {
 		'_id': False,
 		'id': True,
@@ -22,7 +24,31 @@ def get(this, **x):
 
 	return res
 
-# # Получение
+# Получение
+
+def get(this, **x):
+	db_condition = {
+		'tags': [unquote(x['tag'])],
+		'status': 4,
+	}
+	db_filter = {
+		'_id': False,
+		'id': True,
+		'tags': True,
+		'result': True,
+	}
+	heatmap = db['discussions'].find_one(db_condition, db_filter)
+
+	if not heatmap:
+		raise ErrorWrong('tag')
+
+	# Ответ
+
+	res = {
+		'heatmap': heatmap,
+	}
+
+	return res
 
 # def get(this, **x):
 # 	# Проверка параметров

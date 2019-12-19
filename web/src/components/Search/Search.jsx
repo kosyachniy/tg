@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import api from '../../func/api'
+import api from '../../func/api';
 
 import './style.css';
 
@@ -10,8 +10,6 @@ export default class Search extends React.Component {
 		search: '',
 		submit: false,
 		list: [],
-		// type: this.props.type,
-		// type: document.location.pathname.split('/')[1],
 	}
 
 	componentWillMount() {
@@ -19,7 +17,7 @@ export default class Search extends React.Component {
 			this.setState({ list: res.result.heatmaps });
 		};
 
-		api(this, 'heatmap.get', {}, handlerSuccess);
+		api(this, 'heatmap.gets', {}, handlerSuccess);
 	}
 
 	render() {

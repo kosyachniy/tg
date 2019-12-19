@@ -35,12 +35,17 @@ def get(this, **x):
 		'_id': False,
 		'id': True,
 		'tags': True,
+		'topics': True,
 		'result': True,
 	}
 	heatmap = db['discussions'].find_one(db_condition, db_filter)
 
 	if not heatmap:
 		raise ErrorWrong('tag')
+	
+	# Обработка
+
+	heatmap['result'] = list(map(lambda x: round(x, 4), heatmap['result']))
 
 	# Ответ
 

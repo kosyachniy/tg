@@ -2,14 +2,23 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import api from '../../func/api';
 
+import openSocket from 'socket.io-client';
+import { socket } from '../../sets';
+
 import './style.css';
 
 
 export default class Search extends React.Component {
-	state = {
-		search: '',
-		submit: false,
-		list: [],
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			search: '',
+			submit: false,
+			list: [],
+		}
+
+		this.socketIO = null;
 	}
 
 	componentWillMount() {
@@ -18,6 +27,8 @@ export default class Search extends React.Component {
 		};
 
 		api(this, 'heatmap.gets', {}, handlerSuccess);
+
+		this.socketIO = openSocket(`${socket.link}main`);
 	}
 
 	render() {
@@ -35,23 +46,36 @@ export default class Search extends React.Component {
 				<input
 					className="form-control mr-sm-2"
 					type="search"
+					value={this.state.search}
 					placeholder={ this.props.system.type === 'heatmap' ? "Ключевое слово" : "Поиск" }
 					onChange={(event) => {this.setState({ search: event.target.value })}}
 					onKeyDown={(event) => {
 						if (event.key === 'Enter' && this.state.search.length > 0) {
-							this.props.search(this.state.search);
-							this.setState({ submit: true });
+							if (this.props.system.type === 'heatmap') {
+								this.socketIO.emit('heatmap', {tags: this.state.search, token: localStorage.getItem('token')});
+								this.setState({ search: '' })
+							} else {
+								this.props.search(this.state.search);
+								this.setState({ submit: true });
+							}
 						}
 					}}
 				/>
 				
-				{ (this.props.system.type == 'heatmap' && this.state.list) && (
+				{ (this.props.system.type === 'heatmap' && this.state.list) && (
 					<>
 						<br />
 						<p>Обработанные запросы:</p>
 						<ul>
 							{ this.state.list.map((el) => (
-								<li key={el.id}><Link to={`/${this.props.system.type}/${el.tags[0]}`}>{ el.tags[0] }</Link></li>
+								<li key={el.id}>
+									<Link
+										to={`/${this.props.system.type}/${el.tags[0]}`}
+										onClick={()=>{this.props.search(el.tags[0])}}
+									>
+										{ el.tags[0] }
+									</Link>
+								</li>
 							))}
 						</ul>
 					</>

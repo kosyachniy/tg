@@ -119,10 +119,7 @@ def heatmap(x):
 	for message in messages:
 		topics[message['topic']['name']] += 1
 
-	discussion['result'] = {
-		discussion['topics'][i]: topics[i] / mes_all
-	for i, topic in enumerate(discussion['topics'])}
-
+	discussion['result'] = [topics[i] / mes_all for i in range(len(topics))]
 	discussion['status'] = 4
 	db['discussions'].save(discussion)
 

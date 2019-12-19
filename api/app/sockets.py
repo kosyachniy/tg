@@ -1,6 +1,7 @@
 from app import app, sio
 from flask import request
 
+import datetime
 import time
 
 from mongodb import db
@@ -102,8 +103,6 @@ def heatmap(x):
 	discussion['status'] = 3
 	db['discussions'].save(discussion)
 
-	topics = {i: 0 for i, el in enumerate(discussion['topics'])}
-
 	db_condition = {
 		'discussion': discussion_id,
 		'topic': {'$exists': True},
@@ -111,16 +110,60 @@ def heatmap(x):
 	db_filter = {
 		'_id': False,
 		'topic.name': True,
+		'time': True,
 	}
-	messages = [i for i in db['messages'].find(db_condition, db_filter)]
+	messages = list(db['messages'].find(db_condition, db_filter))
 
-	mes_all = len(messages)
+	# Время
 
-	for message in messages:
-		topics[message['topic']['name']] += 1
+	time_min = min(messages, key=lambda x: x['time'])['time']
+	times = []
 
-	discussion['result'] = [topics[i] / mes_all for i in range(len(topics))]
-	discussion['status'] = 4
+	time_start = time.gmtime(time_min)
+	time_stop = time.gmtime()
+
+	year_cur = time_start.tm_year
+	month_cur = time_start.tm_mon
+	while month_cur != time_stop.tm_mon or year_cur != time_stop.tm_year:
+		if month_cur == 12:
+			month_cur = 1
+			year_cur += 1
+		else:
+			month_cur += 1
+
+		times.append(int(datetime.datetime(year_cur, month_cur, 1).timestamp()))
+
+	#
+
+	if len(times) >= 2:
+		#
+
+		topics = [[0 for _ in range(len(times)-1)] for i in range(len(discussion['topics']))]
+		# mes_all = len(messages)
+		mes_count = [0 for _ in range(len(times)-1)]
+
+		#
+
+		for i in range(len(times)-1):
+			for message in messages:
+				if times[i] <= message['time'] < times[i+1]:
+					topics[message['topic']['name']][i] += 1
+					mes_count[i] += 1
+		
+		for i in range(len(topics)):
+			for j in range(len(topics[i])):
+				if topics[i][j]:
+					topics[i][j] /= mes_count[j]
+
+		#
+
+		discussion['timeline'] = times[:-1]
+		discussion['result'] = topics
+		discussion['status'] = 5
+
+	else:
+		discussion['status'] = 4
+
 	db['discussions'].save(discussion)
 
 	# # Ответ

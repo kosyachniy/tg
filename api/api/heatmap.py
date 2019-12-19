@@ -13,8 +13,9 @@ def gets(this, **x):
 		'_id': False,
 		'id': True,
 		'tags': True,
+		'time': True,
 	}
-	heatmaps = list(db['discussions'].find({'status': 4}, db_filter))
+	heatmaps = list(db['discussions'].find({'status': 5}, db_filter).sort('time', -1))
 
 	# Ответ
 
@@ -29,23 +30,24 @@ def gets(this, **x):
 def get(this, **x):
 	db_condition = {
 		'tags': [unquote(x['tag'])],
-		'status': 4,
+		'status': 5,
 	}
 	db_filter = {
 		'_id': False,
 		'id': True,
 		'tags': True,
 		'topics': True,
+		'timeline': True,
 		'result': True,
 	}
 	heatmap = db['discussions'].find_one(db_condition, db_filter)
 
 	if not heatmap:
 		raise ErrorWrong('tag')
-	
+
 	# Обработка
 
-	heatmap['result'] = list(map(lambda x: round(x, 4), heatmap['result']))
+	heatmap['result'] = list(map(lambda y: list(map(lambda x: round(x, 4), y)), heatmap['result']))
 
 	# Ответ
 

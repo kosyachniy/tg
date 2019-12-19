@@ -29,7 +29,7 @@ export default class Heatmap extends React.Component {
 
 		const handleSuccess = (that, res) => {
 			const heatmap = res.result.heatmap;
-			this.setState({ table: heatmap.result, topics: heatmap.topics })
+			this.setState({ table: heatmap.result, topics: heatmap.topics, times: heatmap.timeline })
 		}
 
 		api(this, 'heatmap.get', {tag: this.props.system.search}, handleSuccess)
@@ -48,28 +48,60 @@ export default class Heatmap extends React.Component {
 		}
 	}
 
+	convertDate(time) {
+		const date = new Date(time * 1000);
+
+		let month = date.getMonth()+1;
+		month = month > 9 ? `${month}` : `0${month}`
+		return `${month}.${date.getFullYear()}`
+	}
+
 	// 102
 	// 153
 	// `rgba(${256 * el}, 0, ${256 * (1 - el)})`
 	// 0 0.25 0.5 0.75 1
 
 	render() {
+		if (this.state.times === undefined) {
+			return (
+				<>
+					<br />
+					Загрузка..
+				</>
+			)
+		}
+
 		return (
 			<>
 				<br />
-				<table>
-					<tbody>
-						{ this.state.table.map((el, ind) => (
-							<tr key={ind}>
-								<td>{ this.state.topics[ind] }</td>
-								<td style={{
-									backgroundColor: `#${colors[Math.round(el * (colors.length - 1))]}`,
-									color: el < 0.3 ? '#fff' : '#000',
-								}}>{ Math.round(el * 100) }%</td>
+				<div id="scroll">
+					<table>
+						<tbody>
+							<tr>
+								<td></td>
+								{ this.state.times.map(time => (
+									<td key={time}>
+										{ this.convertDate(time) }
+									</td>
+								))}
 							</tr>
-						))}
-					</tbody>
-				</table>
+							{ this.state.table.map((line, ind) => (
+								<tr key={ind}>
+									<td>{ this.state.topics[ind] }</td>
+									{
+										line.map((el, und) => (
+											<td key={und} style={{
+												backgroundColor: `#${colors[Math.round(el * (colors.length - 1))]}`,
+												color: el < 0.3 ? '#fff' : '#000',
+											}}>{ Math.round(el * 100) }%</td>
+										))
+									}
+									
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
 			</>
 		)
 	}

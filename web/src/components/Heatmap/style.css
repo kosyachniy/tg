@@ -6,12 +6,18 @@
     font-size: 1rem;
 }
 
+#scroll {
+	overflow-y: scroll;
+    white-space: nowrap;
+}
+
 table {
 	width: 100%;
 }
 
 table, tr, td {
 	border: 1px solid #000;
+	white-space: normal;
 }
 
 table td:first-child {

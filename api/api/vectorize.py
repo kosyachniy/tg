@@ -32,7 +32,7 @@ def lemmatize(text, cut_speech=CUT_POS):
 
 	def lemma(word):
 		word = m.parse(word)[0]
-		
+
 		# Отсеивание частей речи
 		speech = word.tag.POS
 

@@ -14,7 +14,7 @@ export default class Header extends React.Component {
 	componentWillMount() {
 		const path = document.location.pathname.split('/');
 
-		const type = path[1];
+		const type = path.length > 1 && path[1] && path[1].length > 0 ? path[1] : 'heatmap';
 		this.props.changeType(type);
 
 		const request = path.length > 2 ? path[2] : '';

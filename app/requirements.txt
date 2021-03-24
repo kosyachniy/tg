@@ -11,7 +11,7 @@ mccabe==0.6.1
 pyaes==1.6.1
 pyasn1==0.4.8
 pylint==2.4.4
-rsa==4.0
+rsa==4.1
 six==1.13.0
 Telethon==0.19.1.6
 typed-ast==1.4.0
